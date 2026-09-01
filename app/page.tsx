@@ -1,0 +1,33 @@
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import Hero from '@/components/Hero';
+import HealthMystery from '@/components/HealthMystery';
+import HowItWorks from '@/components/HowItWorks';
+import Packages from '@/components/Packages';
+import WhySakshi from '@/components/WhySakshi';
+import Testimonials from '@/components/Testimonials';
+import FinalCTA from '@/components/FinalCTA';
+import InvestigationLine from '@/components/InvestigationLine';
+import StickyCTA from '@/components/StickyCTA';
+import ExitIntent from '@/components/ExitIntent';
+
+export default function Page() {
+  return (
+    <>
+      <Header />
+      <InvestigationLine />
+      <main>
+        <Hero />
+        <HealthMystery />
+        <HowItWorks />
+        <Packages />
+        <WhySakshi />
+        <Testimonials />
+        <FinalCTA />
+      </main>
+      <Footer />
+      <StickyCTA />
+      <ExitIntent />
+    </>
+  );
+}
