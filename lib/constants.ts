@@ -89,7 +89,7 @@ export const STAY_ACCOUNTABLE: Plan = {
 };
 
 export const MYSTERY_OPTIONS = [
-  { id: 'weight', title: 'Weight Management', desc: 'Sustainable loss or gain without crash diets.', icon: 'scale' },
+  { id: 'weight', title: 'Weight Management', desc: 'Sustainable weight management with muscle support — no crash diets, no rebound.', icon: 'scale' },
   { id: 'pcos', title: 'PCOS / Hormonal Health', desc: 'Balance hormones through targeted nutrition.', icon: 'hormone' },
   { id: 'diabetes', title: 'Diabetes Nutrition', desc: 'Stable blood sugar through real food.', icon: 'pulse' },
   { id: 'energy', title: 'Low Energy & Lifestyle', desc: 'Rebuild steady energy across the day.', icon: 'bolt' },
@@ -97,13 +97,22 @@ export const MYSTERY_OPTIONS = [
   { id: 'general', title: 'General Wellness', desc: 'Feel better in your body every day.', icon: 'heart' },
 ] as const;
 
-export const MYSTERY_STRATEGIES: Record<string, { title: string; desc: string }> = {
-  weight: { title: 'A Weight Strategy Built Around Your Routine', desc: 'No crash diets, no impossible restrictions — just a structured, sustainable plan that fits your real life.' },
-  pcos: { title: 'Hormonal Balance Through Targeted Nutrition', desc: 'Sakshi maps the patterns affecting your hormones and builds a nutrition rhythm that supports them.' },
-  diabetes: { title: 'Stable Blood Sugar Through Real Food', desc: 'A clear, food-first approach to managing diabetes — practical, measurable, and sustainable.' },
-  energy: { title: 'Rebuild Steady Energy Across Your Day', desc: 'We identify what\'s draining you and rebuild your nutrition rhythm to support consistent energy.' },
-  sports: { title: 'Performance Fuel For Serious Training', desc: 'Targeted nutrition to support your training load, recovery and performance goals.' },
-  general: { title: 'Everyday Wellness, Built Around You', desc: 'Feel better in your body — a personalized plan that supports your overall health and longevity.' },
+export const MYSTERY_STRATEGIES: Record<string, { title: string; desc: string[]; image?: string }> = {
+  weight: {
+    title: 'Weight Management',
+    image: 'https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?auto=format&fit=crop&w=1200&q=80',
+    desc: [
+      'Sustainable weight management with muscle support — no crash diets, no rebound.',
+      'Weight loss, healthy weight gain & breaking plateaus',
+      'Eating patterns & appetite signals',
+      'Metabolism, sleep & stress interplay',
+    ],
+  },
+  pcos: { title: 'Hormonal Balance Through Targeted Nutrition', desc: ['Sakshi maps the patterns affecting your hormones and builds a nutrition rhythm that supports them.'] },
+  diabetes: { title: 'Stable Blood Sugar Through Real Food', desc: ['A clear, food-first approach to managing diabetes — practical, measurable, and sustainable.'] },
+  energy: { title: 'Rebuild Steady Energy Across Your Day', desc: ['We identify what\'s draining you and rebuild your nutrition rhythm to support consistent energy.'] },
+  sports: { title: 'Performance Fuel For Serious Training', desc: ['Targeted nutrition to support your training load, recovery and performance goals.'] },
+  general: { title: 'Everyday Wellness, Built Around You', desc: ['Feel better in your body — a personalized plan that supports your overall health and longevity.'] },
 };
 
 export const TESTIMONIALS = [

@@ -10,7 +10,6 @@ const icons = {
 
 export default function HealthMystery() {
   const [active, setActive] = useState<string | null>(null);
-  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const obs = new IntersectionObserver((entries) => {
@@ -21,8 +20,7 @@ export default function HealthMystery() {
   }, []);
 
   const handleSelect = (id: string) => {
-    setActive((prev) => (prev === id ? null : id));
-    setVisible(!!active && active !== id ? false : !active);
+    setActive((prev) => (prev === id ? id : id));
   };
 
   const strategy = active ? MYSTERY_STRATEGIES[active] : null;
@@ -57,15 +55,40 @@ export default function HealthMystery() {
           })}
         </div>
 
-        <div className={`max-w-3xl mx-auto mt-12 lg:mt-16 transition-all duration-700 ease-out ${active ? 'opacity-100 max-h-[800px]' : 'opacity-0 max-h-0 overflow-hidden'}`}>
+        <div className={`max-w-3xl mx-auto mt-12 lg:mt-16 transition-all duration-700 ease-out ${active ? 'opacity-100 max-h-[1200px]' : 'hidden'}`}>
           <div className="relative">
             <svg className="absolute -top-12 left-1/2 -translate-x-1/2 w-64 h-12 pointer-events-none" viewBox="0 0 240 48">
               <path d="M10 5 Q 120 -5 230 5" stroke="#7E906F" strokeWidth="1.5" fill="none" strokeDasharray="4 4" opacity="0.5" />
             </svg>
             <div className="rounded-3xl bg-forest text-warm-white p-8 lg:p-10 text-center shadow-2xl">
               <div className="text-[11px] tracking-[0.25em] uppercase text-sage-light font-semibold mb-3">Your Personalized Nutrition Strategy</div>
+
+              {strategy?.image && (
+                <div className="mb-5 overflow-hidden rounded-2xl border border-sage-light/30">
+                  <img
+                    src={strategy.image}
+                    alt={strategy.title}
+                    className="h-52 w-full object-cover object-center"
+                  />
+                </div>
+              )}
+
               <h3 className="font-display text-2xl lg:text-3xl leading-tight mb-4">{strategy?.title}</h3>
-              <p className="text-sage-light/80 text-sm mb-6 max-w-lg mx-auto">{strategy?.desc}</p>
+
+              <div className="space-y-2 text-sage-light/90 text-sm max-w-lg mx-auto mb-6 text-left">
+                {strategy?.title === 'Weight Management' ? (
+                  <>
+                    <p className="leading-relaxed font-semibold text-warm-white">• Weight loss, healthy weight gain & breaking plateaus</p>
+                    <p className="leading-relaxed">• Eating patterns & appetite signals</p>
+                    <p className="leading-relaxed">• Metabolism, sleep & stress interplay</p>
+                  </>
+                ) : (
+                  strategy?.desc.map((line) => (
+                    <p key={line} className="leading-relaxed">{line}</p>
+                  ))
+                )}
+              </div>
+
               <Link href="/#plans" className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full text-[15px] bg-sage-light text-forest hover:bg-warm-white transition-all">
                 <span>Find My Plan</span>
                 <ArrowRight size={16} strokeWidth={2.5} />
