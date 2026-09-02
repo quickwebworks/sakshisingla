@@ -1,10 +1,11 @@
 'use client';
+import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { CheckCircle2, ArrowRight } from 'lucide-react';
 import { whatsappLink } from '@/lib/constants';
 
-export default function SuccessPage() {
+function SuccessContent() {
   const params = useSearchParams();
   const plan = params.get('plan') ?? 'your plan';
 
@@ -25,5 +26,13 @@ export default function SuccessPage() {
         <Link href="/" className="arrow-link text-sm block">Back to home <ArrowRight size={14} strokeWidth={2.5} /></Link>
       </div>
     </div>
+  );
+}
+
+export default function SuccessPage() {
+  return (
+    <Suspense fallback={null}>
+      <SuccessContent />
+    </Suspense>
   );
 }
