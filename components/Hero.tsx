@@ -52,7 +52,7 @@ export default function Hero() {
                   <Award size={14} strokeWidth={2.5} className="text-forest" />
                 </div>
                 <div>
-                  <div className="font-display text-xl font-medium text-forest leading-none">5+ Years</div>
+                  <div className="font-display text-xl font-medium text-forest leading-none">6+ Years</div>
                   <div className="text-[11px] tracking-[0.18em] uppercase text-sage-dark font-medium mt-0.5">Experience</div>
                 </div>
               </div>
@@ -62,7 +62,7 @@ export default function Hero() {
                   <Globe size={14} strokeWidth={2.5} className="text-forest" />
                 </div>
                 <div>
-                  <div className="font-display text-xl font-medium text-forest leading-none">200+</div>
+                  <div className="font-display text-xl font-medium text-forest leading-none">262+</div>
                   <div className="text-[11px] tracking-[0.18em] uppercase text-sage-dark font-medium mt-0.5">International Clients</div>
                 </div>
               </div>

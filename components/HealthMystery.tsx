@@ -1,15 +1,17 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { Scale, Activity, Zap, Dumbbell, Heart, Droplet, ArrowRight } from 'lucide-react';
+import { Scale, Activity, Zap, Dumbbell, Heart, Droplet, Sparkles, UtensilsCrossed, Layers, ArrowRight } from 'lucide-react';
 import { MYSTERY_OPTIONS, MYSTERY_STRATEGIES } from '@/lib/constants';
 
 const icons = {
-  scale: Scale, hormone: Droplet, pulse: Activity, bolt: Zap, dumbbell: Dumbbell, heart: Heart,
+  scale: Scale, hormone: Droplet, pulse: Activity, bolt: Zap, dumbbell: Dumbbell, heart: Heart, sparkle: Sparkles, utensils: UtensilsCrossed, layers: Layers,
 };
 
 export default function HealthMystery() {
   const [active, setActive] = useState<string | null>(null);
+  const planLinkRef = useRef<HTMLAnchorElement>(null);
+  const detailsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const obs = new IntersectionObserver((entries) => {
@@ -20,8 +22,16 @@ export default function HealthMystery() {
   }, []);
 
   const handleSelect = (id: string) => {
-    setActive((prev) => (prev === id ? id : id));
+    setActive(id);
   };
+
+  useEffect(() => {
+    if (!active) return;
+    requestAnimationFrame(() => {
+      detailsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      planLinkRef.current?.focus({ preventScroll: true });
+    });
+  }, [active]);
 
   const strategy = active ? MYSTERY_STRATEGIES[active] : null;
 
@@ -43,7 +53,8 @@ export default function HealthMystery() {
               <button
                 key={opt.id}
                 onClick={() => handleSelect(opt.id)}
-                className={`mystery-card reveal delay-${i + 1} rounded-2xl p-6 text-left ${active === opt.id ? 'active' : ''}`}
+                aria-pressed={active === opt.id}
+                className={`mystery-card rounded-2xl p-6 text-left ${active === opt.id ? 'active' : ''}`}
               >
                 <div className={`mystery-icon w-12 h-12 rounded-xl bg-sage-light flex items-center justify-center mb-4 transition-colors`}>
                   <Icon size={20} className="text-forest" />
@@ -55,44 +66,41 @@ export default function HealthMystery() {
           })}
         </div>
 
-        <div className={`max-w-3xl mx-auto mt-12 lg:mt-16 transition-all duration-700 ease-out ${active ? 'opacity-100 max-h-[1200px]' : 'hidden'}`}>
+        <div ref={detailsRef} className={`max-w-5xl mx-auto mt-12 lg:mt-16 transition-opacity duration-300 ${active ? 'opacity-100' : 'hidden'}`}>
           <div className="relative">
             <svg className="absolute -top-12 left-1/2 -translate-x-1/2 w-64 h-12 pointer-events-none" viewBox="0 0 240 48">
               <path d="M10 5 Q 120 -5 230 5" stroke="#7E906F" strokeWidth="1.5" fill="none" strokeDasharray="4 4" opacity="0.5" />
             </svg>
-            <div className="rounded-3xl bg-forest text-warm-white p-8 lg:p-10 text-center shadow-2xl">
-              <div className="text-[11px] tracking-[0.25em] uppercase text-sage-light font-semibold mb-3">Your Personalized Nutrition Strategy</div>
-
+            <div className="rounded-3xl bg-forest text-warm-white overflow-hidden shadow-2xl md:grid md:grid-cols-[0.9fr_1.1fr] md:text-left">
               {strategy?.image && (
-                <div className="mb-5 overflow-hidden rounded-2xl border border-sage-light/30">
+                <div className="min-h-64 md:min-h-full">
                   <img
                     src={strategy.image}
                     alt={strategy.title}
-                    className="h-52 w-full object-cover object-center"
+                    className="h-full min-h-64 w-full object-cover object-center"
                   />
                 </div>
               )}
 
-              <h3 className="font-display text-2xl lg:text-3xl leading-tight mb-4">{strategy?.title}</h3>
+              <div className="p-8 lg:p-10">
+                <div className="text-[11px] tracking-[0.25em] uppercase text-sage-light font-semibold mb-3">Your Personalized Nutrition Strategy</div>
+                <h3 className="font-display text-2xl lg:text-3xl leading-tight mb-3">{strategy?.title}</h3>
+                <p className="text-sage-light/90 text-sm leading-relaxed mb-6">{strategy?.subtitle}</p>
 
-              <div className="space-y-2 text-sage-light/90 text-sm max-w-lg mx-auto mb-6 text-left">
-                {strategy?.title === 'Weight Management' ? (
-                  <>
-                    <p className="leading-relaxed font-semibold text-warm-white">• Weight loss, healthy weight gain & breaking plateaus</p>
-                    <p className="leading-relaxed">• Eating patterns & appetite signals</p>
-                    <p className="leading-relaxed">• Metabolism, sleep & stress interplay</p>
-                  </>
-                ) : (
-                  strategy?.desc.map((line) => (
-                    <p key={line} className="leading-relaxed">{line}</p>
-                  ))
-                )}
+                <ul className="space-y-3 text-sm text-sage-light/90 mb-8">
+                  {strategy?.points.map((point, index) => (
+                    <li key={point} className="flex items-start gap-3 leading-relaxed">
+                      <span className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-sage-light text-xs font-semibold text-forest">{index + 1}</span>
+                      <span className={index === 0 && strategy.title === 'Weight Management' ? 'font-semibold text-warm-white' : ''}>{point}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <Link ref={planLinkRef} href="/#plans" className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full text-[15px] bg-sage-light text-forest hover:bg-warm-white transition-all focus-visible:ring-4 focus-visible:ring-sage-light/60">
+                  <span>Find My Plan</span>
+                  <ArrowRight size={16} strokeWidth={2.5} />
+                </Link>
               </div>
-
-              <Link href="/#plans" className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full text-[15px] bg-sage-light text-forest hover:bg-warm-white transition-all">
-                <span>Find My Plan</span>
-                <ArrowRight size={16} strokeWidth={2.5} />
-              </Link>
             </div>
           </div>
         </div>

@@ -6,6 +6,7 @@ import HowItWorks from '@/components/HowItWorks';
 import Packages from '@/components/Packages';
 import WhySakshi from '@/components/WhySakshi';
 import Testimonials from '@/components/Testimonials';
+import GoogleReviews from '@/components/GoogleReviews';
 import FinalCTA from '@/components/FinalCTA';
 import InvestigationLine from '@/components/InvestigationLine';
 import StickyCTA from '@/components/StickyCTA';
@@ -23,6 +24,7 @@ export default function Page() {
         <Packages />
         <WhySakshi />
         <Testimonials />
+        <GoogleReviews />
         <FinalCTA />
       </main>
       <Footer />
