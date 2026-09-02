@@ -1,7 +1,7 @@
 import { Resend } from 'resend';
-import LeadConfirmation from '@/emails/lead-confirmation';
-import AdminNotification from '@/emails/admin-notification';
-import PaymentConfirmation from '@/emails/payment-confirmation';
+import LeadConfirmation from '@/lib/emails/lead-confirmation';
+import AdminNotification from '@/lib/emails/admin-notification';
+import PaymentConfirmation from '@/lib/emails/payment-confirmation';
 
 const resend = new Resend(process.env.RESEND_API_KEY!);
 

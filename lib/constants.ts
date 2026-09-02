@@ -1,5 +1,5 @@
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
-export const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '919876543210';
+export const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '916280766101';
 export const whatsappLink = (msg?: string) =>
   `https://wa.me/${WHATSAPP_NUMBER}${msg ? `?text=${encodeURIComponent(msg)}` : ''}`;
 
@@ -73,14 +73,19 @@ export const PLANS: Plan[] = [
   },
 ];
 
-export const STAY_ACCOUNTABLE = {
-  id: 'stay-accountable' as const,
+export const STAY_ACCOUNTABLE: Plan = {
+  id: 'stay-accountable',
   name: 'Stay Accountable',
   price: 1499,
   priceLabel: '₹1,499/month',
   description: '2 follow-up calls + accountability + minor plan adjustments.',
   cta: 'Continue My Journey',
   badge: 'Existing Clients Only',
+  features: [
+    '2 follow-up calls',
+    'Accountability support',
+    'Minor plan adjustments',
+  ],
 };
 
 export const MYSTERY_OPTIONS = [

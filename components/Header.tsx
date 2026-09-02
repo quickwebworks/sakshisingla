@@ -23,6 +23,14 @@ export default function Header() {
     { label: 'Contact', href: '/#contact' },
   ];
 
+  const legalLinks = [
+    { label: 'Privacy Policy', href: '/privacy-policy' },
+    { label: 'Terms & Conditions', href: '/terms-and-conditions' },
+    { label: 'Cancellation & Refund', href: '/cancellation-and-refund-policy' },
+    { label: 'Shipping & Delivery', href: '/shipping-and-delivery-policy' },
+    { label: 'Disclaimer', href: '/disclaimer' },
+  ];
+
   return (
     <>
       <header className={`sticky-header fixed top-0 left-0 right-0 z-40 transition-all ${scrolled ? 'h-16 lg:h-20' : 'h-16 lg:h-20'}`}>
@@ -45,6 +53,22 @@ export default function Header() {
                 {n.label}
               </Link>
             ))}
+            <div className="group relative">
+              <button type="button" className="text-charcoal-soft hover:text-forest transition-colors">
+                Legal
+              </button>
+              <div className="absolute right-0 top-full mt-3 w-56 rounded-2xl border border-sage/30 bg-warm-white p-2 shadow-lg opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-200">
+                {legalLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="block rounded-xl px-3 py-2 text-sm text-charcoal/80 hover:bg-sage/10 hover:text-forest"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -73,6 +97,17 @@ export default function Header() {
                 {n.label}
               </Link>
             ))}
+
+            <div className="py-3 border-b border-sage/30">
+              <div className="text-base uppercase tracking-[0.2em] text-sage-dark mb-3">Legal</div>
+              <div className="grid gap-2 text-lg">
+                {legalLinks.map((link) => (
+                  <Link key={link.href} href={link.href} onClick={() => setOpen(false)} className="text-forest/80 hover:text-forest text-base">
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
           </nav>
           <div className="mt-auto space-y-3">
             <Link href="/#contact" onClick={() => setOpen(false)} className="cta-primary block w-full py-4 rounded-full text-center font-medium">

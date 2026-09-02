@@ -30,18 +30,23 @@ export default function Footer() {
           <div className="md:col-span-4">
             <div className="text-[10px] tracking-[0.25em] uppercase text-sage-light font-semibold mb-4">Connect</div>
             <ul className="space-y-2.5 text-sm">
-              <li><a href={whatsappLink()} target="_blank" rel="noopener" className="text-warm-white/70 hover:text-sage-light transition-colors inline-flex items-center gap-2"><MessageCircle size={14} /> WhatsApp Sakshi</a></li>
-              <li><a href="https://instagram.com/dietitian_sakshi" target="_blank" rel="noopener" className="text-warm-white/70 hover:text-sage-light transition-colors inline-flex items-center gap-2"><Instagram size={14} /> Instagram</a></li>
-              <li><a href="mailto:hello@sakshisingla.com" className="text-warm-white/70 hover:text-sage-light transition-colors inline-flex items-center gap-2"><Mail size={14} /> hello@sakshisingla.com</a></li>
+              <li><a href={whatsappLink()} target="_blank" rel="noopener" className="text-warm-white/70 hover:text-sage-light transition-colors inline-flex items-center gap-2"><MessageCircle size={14} /> +91 62807 66101</a></li>
+              <li><a href="https://www.instagram.com/dietitiansakshisingla/" target="_blank" rel="noopener" className="text-warm-white/70 hover:text-sage-light transition-colors inline-flex items-center gap-2"><Instagram size={14} /> @dietitiansakshisingla</a></li>
+              <li><a href="mailto:diet@sakshisingla.com" className="text-warm-white/70 hover:text-sage-light transition-colors inline-flex items-center gap-2"><Mail size={14} /> diet@sakshisingla.com</a></li>
             </ul>
+            <p className="mt-5 text-sm text-warm-white/70 leading-relaxed">
+              890, Phase 10, Sector 64, SAS Nagar Mohali, Punjab, India - 160062
+            </p>
           </div>
         </div>
         <div className="pt-8 border-t border-warm-white/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-xs text-warm-white/50">
           <div>© {year} Dietitian Sakshi Singla. All rights reserved.</div>
           <div className="flex flex-wrap gap-x-5 gap-y-2">
-            <Link href="#" className="hover:text-sage-light transition-colors">Privacy</Link>
-            <Link href="#" className="hover:text-sage-light transition-colors">Terms</Link>
-            <Link href="#" className="hover:text-sage-light transition-colors">Medical Disclaimer</Link>
+            <Link href="/privacy-policy" className="hover:text-sage-light transition-colors">Privacy Policy</Link>
+            <Link href="/terms-and-conditions" className="hover:text-sage-light transition-colors">Terms and Conditions</Link>
+            <Link href="/cancellation-and-refund-policy" className="hover:text-sage-light transition-colors">Cancellation &amp; Refund Policy</Link>
+            <Link href="/shipping-and-delivery-policy" className="hover:text-sage-light transition-colors">Shipping &amp; Delivery Policy</Link>
+            <Link href="/disclaimer" className="hover:text-sage-light transition-colors">Disclaimer</Link>
           </div>
         </div>
         <div className="mt-6 text-[11px] text-warm-white/40 leading-relaxed max-w-3xl">

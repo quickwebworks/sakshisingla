@@ -10,8 +10,8 @@
 
 * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 html { scroll-behavior: smooth; }
-body { background: var(--warm-white); color: var(--charcoal); overflow-x: hidden; }
-.font-display { font-family: 'Fraunces', serif; }
+body { background: var(--warm-white); color: var(--charcoal); overflow-x: hidden; font-family: 'Segoe UI', Arial, sans-serif; }
+.font-display { font-family: Georgia, 'Times New Roman', serif; }
 
 /* === Investigation Line === */
 .investigation-line { position: fixed; left: 28px; top: 0; bottom: 0; width: 2px; z-index: 30; pointer-events: none;

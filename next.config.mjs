@@ -8,6 +8,10 @@ const nextConfig = {
       { protocol: 'https', hostname: 'images.pexels.com' },
     ],
   },
-  experimental: { serverActions": { allowedOrigins: ['*'] } },
+  experimental: {
+    serverActions: {
+      allowedOrigins: ['*'],
+    },
+  },
 };
 export default nextConfig;

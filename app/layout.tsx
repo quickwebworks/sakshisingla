@@ -1,10 +1,6 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Inter, Fraunces } from 'next/font/google';
 import { ToastProvider } from '@/components/ToastProvider';
-
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
-const fraunces = Fraunces({ subsets: ['latin'], variable: '--font-display' });
 
 export const metadata: Metadata = {
   title: 'Dietitian Sakshi Singla — Decode Your Health Mystery',
@@ -19,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${fraunces.variable}`}>
+    <html lang="en">
       <body>
         <ToastProvider>{children}</ToastProvider>
       </body>
