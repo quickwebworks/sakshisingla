@@ -16,6 +16,8 @@ export interface Plan {
   features: string[];
   cta: string;
   badge?: string;
+  bestSuitedFor?: string[];
+  recommendation?: string;
 }
 
 export const PLANS: Plan[] = [
@@ -36,24 +38,32 @@ export const PLANS: Plan[] = [
   },
   {
     id: 'transformation',
-    name: '90-Day Transformation',
+    name: '12-Week Transformation Program',
     price: 9999,
     priceLabel: '₹9,999',
     period: '₹3,333/month',
     originalPrice: 11997,
     saveBadge: 'Save ₹1,998',
-    description: 'Three months of guided, accountable change.',
+    description: 'This is the program I usually recommend for proper, visible and sustainable results.',
     features: [
       'Personalized nutrition plan',
-      'Weekly follow-ups',
-      'Regular adjustments',
-      'Progress tracking',
-      'Lifestyle coaching',
-      'Accountability & WhatsApp guidance',
+      'Weekly check-ins & progress tracking',
+      'Regular plan adjustments',
+      'Habit & lifestyle correction',
+      'WhatsApp support & guidance',
+      'Accountability throughout the journey',
     ],
     cta: 'Start My Transformation',
     badge: 'Most Popular',
     popular: true,
+    bestSuitedFor: [
+      'Fat loss & inch loss',
+      'PCOS / Thyroid management',
+      'Gut health improvement',
+      'Better relationship with food',
+      'Lifestyle & habit transformation',
+    ],
+    recommendation: 'Recommended if you want deeper and long-lasting transformation.',
   },
   {
     id: 'monthly',
@@ -121,9 +131,9 @@ export const MYSTERY_STRATEGIES: Record<string, { title: string; subtitle: strin
   },
   pcos: { title: 'PCOS Nutrition', subtitle: 'Nutrition patterns that support insulin sensitivity and hormonal balance.', points: ['Cycle-aware nutrition', 'Blood sugar and cravings support', 'Energy, sleep and stress habits'], image: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=1200&q=80' },
   diabetes: { title: 'Diabetes Nutrition', subtitle: 'Blood-sugar-aware eating through real food and practical choices.', points: ['Balanced meals for steadier readings', 'Food choices that fit your routine', 'Progress tracking and practical guidance'], image: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=1200&q=80' },
-  thyroid: { title: 'Thyroid Nutrition', subtitle: 'Nutrition support for Hyper/Hypo conditions, energy and metabolic wellbeing.', points: ['Condition-aware nutrition support', 'Energy and metabolism habits', 'Practical meals for your routine'] },
-  gut: { title: 'Gut & Digestive Health', subtitle: 'Personalised nutrition for better digestion, comfort and regularity.', points: ['Identify food and symptom patterns', 'Comfort-focused meal strategies', 'Support for regularity and routine'] },
-  liver: { title: 'Liver Health Nutrition', subtitle: 'Food-first nutrition support for fatty liver and metabolic health.', points: ['Metabolic health support', 'Balanced, liver-friendly meals', 'Sustainable lifestyle changes'] },
+  thyroid: { title: 'Thyroid Nutrition', subtitle: 'Nutrition support for Hyper/Hypo conditions, energy and metabolic wellbeing.', points: ['Condition-aware nutrition support', 'Energy and metabolism habits', 'Practical meals for your routine'], image: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=1200&q=85' },
+  gut: { title: 'Gut & Digestive Health', subtitle: 'Personalised nutrition for better digestion, comfort and regularity.', points: ['Identify food and symptom patterns', 'Comfort-focused meal strategies', 'Support for regularity and routine'], image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=1200&q=85' },
+  liver: { title: 'Liver Health Nutrition', subtitle: 'Food-first nutrition support for fatty liver and metabolic health.', points: ['Metabolic health support', 'Balanced, liver-friendly meals', 'Sustainable lifestyle changes'], image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eeed?auto=format&fit=crop&w=1200&q=85' },
   heart: { title: 'Heart & Cholesterol Nutrition', subtitle: 'Heart-supportive eating without complicated food rules.', points: ['Heart-supportive food choices', 'Practical cholesterol-aware meals', 'Simple habits for long-term wellbeing'] },
   kidney: { title: 'Kidney Nutrition', subtitle: 'Personalised nutrition adapted to kidney function and medical needs.', points: ['Nutrition adapted to your needs', 'Medical-context meal guidance', 'Clear, practical food choices'] },
   'skin-hair': { title: 'Skin & Hair Nutrition', subtitle: 'Nourishment from within to support healthier skin and hair.', points: ['Nutrient-rich meal planning', 'Lifestyle support for healthy growth', 'Personalised guidance for your goals'] },

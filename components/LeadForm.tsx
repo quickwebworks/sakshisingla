@@ -19,8 +19,9 @@ export default function LeadForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
-      if (!res.ok) throw new Error('Request failed');
-      toast('Thanks — Sakshi will personally reach out within 24 hours.');
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error ?? 'Request failed');
+      toast(`Thanks — your reference number is ${result.referenceNumber}. Sakshi will personally reach out within 24 hours.`);
       form.reset();
     } catch {
       toast('Something went wrong. Please try WhatsApp instead.');

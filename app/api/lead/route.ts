@@ -29,7 +29,7 @@ export async function POST(req: Request) {
       .insert({
         name, email, phone, goal, source, ip, user_agent: userAgent,
       })
-      .select('id')
+      .select('id, reference_number')
       .single();
 
     if (error) {
@@ -37,12 +37,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Could not save lead' }, { status: 500 });
     }
 
-    // Fire-and-forget emails (don't block the response)
-    sendLeadEmails({ name, email, phone, goal }).catch((e) =>
-      console.error('Resend failed:', e)
-    );
+    await sendLeadEmails({
+      name,
+      email,
+      phone,
+      goal,
+      referenceNumber: data.reference_number,
+    });
 
-    return NextResponse.json({ ok: true, id: data.id });
+    return NextResponse.json({ ok: true, id: data.id, referenceNumber: data.reference_number });
   } catch (err) {
     console.error('Lead route error:', err);
     return NextResponse.json({ error: 'Server error' }, { status: 500 });

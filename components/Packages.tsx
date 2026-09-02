@@ -39,6 +39,19 @@ export default function Packages() {
               )}
               <h3 className="font-display text-2xl lg:text-3xl text-forest-deep mb-2">{plan.name}</h3>
               <p className="text-sm text-charcoal-soft mb-5">{plan.description}</p>
+              {plan.bestSuitedFor && (
+                <div className="mb-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-sage-dark mb-2">Best suited for</p>
+                  <ul className="space-y-1.5">
+                    {plan.bestSuitedFor.map((item) => (
+                      <li key={item} className="flex items-start gap-2 text-sm text-charcoal-soft">
+                        <Check size={15} strokeWidth={2.5} className="text-forest mt-0.5 shrink-0" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
               <div className="flex items-baseline gap-3 mb-1.5">
                 {plan.originalPrice && <span className="price-strike font-display text-xl">₹{plan.originalPrice.toLocaleString('en-IN')}</span>}
                 <span className="font-display text-5xl lg:text-6xl font-medium text-forest-deep leading-none">{plan.priceLabel}</span>
@@ -54,6 +67,7 @@ export default function Packages() {
                   </li>
                 ))}
               </ul>
+              {plan.recommendation && <p className="text-sm font-medium italic text-forest mb-6">{plan.recommendation}</p>}
               <Link href={`/checkout/${plan.id}`} className={`${plan.popular ? 'cta-primary' : 'cta-secondary'} block w-full py-${plan.popular ? '4' : '3.5'} rounded-full text-center text-sm`}>
                 {plan.cta}
               </Link>

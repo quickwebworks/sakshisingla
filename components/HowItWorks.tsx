@@ -4,9 +4,9 @@ import { Search, CheckCircle2, FileText, ArrowRight } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 
 const steps = [
-  { num: '01', label: 'Investigate', title: 'Understand Your Patterns', desc: 'We start with your habits, lifestyle, daily challenges and goals — the real clues your body is giving.', icon: Search },
-  { num: '02', label: 'Decode', title: "Identify What's Not Working", desc: 'We read the patterns — what to adjust, what to keep, what\'s been silently holding you back.', icon: CheckCircle2 },
-  { num: '03', label: 'Build Your Strategy', title: 'Receive Your Personal Plan', desc: 'A practical nutrition plan with ongoing guidance, accountability and adjustments as you progress.', icon: FileText },
+  { num: '01', label: 'Investigate', title: 'Understand Your Patterns', desc: 'We start with you current lifestyle, daily habits, challenges and goals- the real clues your body is giving. We need your blood work and body composition.', icon: Search },
+  { num: '02', label: 'Decode', title: "Identify What's Not Working", desc: "We read the patterns — what to adjust, what to keep, we find the loop holes and find out what's been silently holding you back.", icon: CheckCircle2 },
+  { num: '03', label: 'Build Your Strategy', title: 'Receive Your Personal Plan', desc: 'We build your personalized nutrition strategy and weekly habits- without rushing. deliver you your practical, customized plan with ongoing guidance, accountability, and adjustments as you progress.', icon: FileText },
 ];
 
 export default function HowItWorks() {

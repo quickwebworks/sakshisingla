@@ -1,7 +1,7 @@
 import { Html, Head, Preview, Body, Container, Section, Text, Link } from '@react-email/components';
 
-export default function AdminNotification({ name, email, phone, goal }: {
-  name: string; email: string; phone: string; goal: string;
+export default function AdminNotification({ name, email, phone, goal, referenceNumber }: {
+  name: string; email: string; phone: string; goal: string; referenceNumber: string;
 }) {
   return (
     <Html>
@@ -13,6 +13,7 @@ export default function AdminNotification({ name, email, phone, goal }: {
             <Text style={{ color: '#C9D4BC', fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', margin: 0, fontWeight: 600 }}>New Lead Received</Text>
           </Section>
           <Text style={{ fontSize: '22px', fontFamily: 'Fraunces, serif', color: '#1A1A1A', margin: '0 0 20px' }}>{name}</Text>
+          <Text style={{ fontSize: '14px', color: '#2D2D2D', margin: '4px 0' }}><strong>Reference:</strong> {referenceNumber}</Text>
           <Text style={{ fontSize: '14px', color: '#2D2D2D', margin: '4px 0' }}><strong>Email:</strong> {email}</Text>
           <Text style={{ fontSize: '14px', color: '#2D2D2D', margin: '4px 0' }}><strong>Phone:</strong> {phone}</Text>
           <Text style={{ fontSize: '14px', color: '#2D2D2D', margin: '4px 0 24px' }}><strong>Goal:</strong> {goal}</Text>

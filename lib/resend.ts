@@ -3,35 +3,48 @@ import LeadConfirmation from '@/lib/emails/lead-confirmation';
 import AdminNotification from '@/lib/emails/admin-notification';
 import PaymentConfirmation from '@/lib/emails/payment-confirmation';
 
-const resend = new Resend(process.env.RESEND_API_KEY!);
+function getResend() {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) throw new Error('Resend API key is not configured');
+  return new Resend(apiKey);
+}
 
-const from = `${process.env.RESEND_FROM_NAME!} <${process.env.RESEND_FROM!}>`;
+function getFromAddress() {
+  const fromAddress = process.env.RESEND_FROM;
+  if (!fromAddress) throw new Error('Resend from address is not configured');
+  return `${process.env.RESEND_FROM_NAME ?? 'Dietitian Sakshi Singla'} <${fromAddress}>`;
+}
 
 export async function sendLeadEmails(input: {
-  name: string; email: string; phone: string; goal: string;
+  name: string; email: string; phone: string; goal: string; referenceNumber: string;
 }) {
+  const resend = getResend();
+  const from = getFromAddress();
   const [userEmail, adminEmail] = await Promise.all([
     resend.emails.send({
       from,
       to: input.email,
-      subject: 'We received your health case, ' + input.name.split(' ')[0],
+      subject: `Enquiry received — ${input.referenceNumber}`,
       react: LeadConfirmation(input),
     }),
     resend.emails.send({
       from,
       to: process.env.ADMIN_EMAIL!,
-      subject: `New lead — ${input.name} — ${input.goal}`,
+      subject: `New enquiry — ${input.referenceNumber} — ${input.goal}`,
       react: AdminNotification(input),
     }),
   ]);
+
+  if (userEmail.error) throw new Error(`User email failed: ${userEmail.error.message}`);
+  if (adminEmail.error) throw new Error(`Admin email failed: ${adminEmail.error.message}`);
   return { userEmail, adminEmail };
 }
 
 export async function sendPaymentConfirmationEmail(input: {
   name: string; email: string; plan: string; amount: number;
 }) {
-  return resend.emails.send({
-    from,
+  return getResend().emails.send({
+    from: getFromAddress(),
     to: input.email,
     subject: `Payment received — ${input.plan}`,
     react: PaymentConfirmation(input),

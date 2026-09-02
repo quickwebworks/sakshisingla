@@ -1,7 +1,7 @@
 import { Html, Head, Preview, Body, Container, Section, Hr, Text, Link, Img } from '@react-email/components';
 
-export default function LeadConfirmation({ name, email, phone, goal }: {
-  name: string; email: string; phone: string; goal: string;
+export default function LeadConfirmation({ name, email, phone, goal, referenceNumber }: {
+  name: string; email: string; phone: string; goal: string; referenceNumber: string;
 }) {
   return (
     <Html>
@@ -19,6 +19,7 @@ export default function LeadConfirmation({ name, email, phone, goal }: {
             </Text>
             <Section style={{ background: '#F5EFE3', borderRadius: '12px', padding: '20px', marginBottom: '24px' }}>
               <Text style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#7E906F', fontWeight: 600, margin: '0 0 12px' }}>Case Summary</Text>
+              <Text style={{ fontSize: '14px', color: '#1A1A1A', margin: '4px 0' }}><strong>Reference:</strong> {referenceNumber}</Text>
               <Text style={{ fontSize: '14px', color: '#1A1A1A', margin: '4px 0' }}><strong>Name:</strong> {name}</Text>
               <Text style={{ fontSize: '14px', color: '#1A1A1A', margin: '4px 0' }}><strong>Phone:</strong> {phone}</Text>
               <Text style={{ fontSize: '14px', color: '#1A1A1A', margin: '4px 0' }}><strong>Email:</strong> {email}</Text>
