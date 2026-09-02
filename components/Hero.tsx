@@ -85,7 +85,7 @@ export default function Hero() {
           <div className="lg:col-span-5 relative reveal delay-2">
             <div className="relative max-w-[420px] mx-auto">
               <div className="portrait-mask aspect-[4/5] shadow-2xl relative">
-                <Image src="https://picsum.photos/seed/sakshi-portrait-nutritionist/600/750.jpg" alt="Dietitian Sakshi Singla portrait" width={600} height={750} className="w-full h-full object-cover" priority />
+                <Image src="/images/dietitian-sakshi-singla.jpg" alt="Dietitian Sakshi Singla portrait" width={600} height={750} className="w-full h-full object-cover" priority />
                 <div className="absolute inset-0 bg-gradient-to-tr from-forest-deep/30 via-transparent to-sage/10 mix-blend-multiply" />
               </div>
               {clueCards.map((c) => (
