@@ -21,7 +21,10 @@ export default function LeadForm() {
       });
       const result = await res.json();
       if (!res.ok) throw new Error(result.error ?? 'Request failed');
-      toast(`Thanks — your reference number is ${result.referenceNumber}. Sakshi will personally reach out within 24 hours.`);
+      const emailNote = result.emailsSent === false
+        ? ' Email delivery is delayed, but Sakshi has your enquiry.'
+        : '';
+      toast(`Thanks — your reference number is ${result.referenceNumber}. Sakshi will personally reach out within 24 hours.${emailNote}`);
       form.reset();
     } catch {
       toast('Something went wrong. Please try WhatsApp instead.');

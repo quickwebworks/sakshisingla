@@ -37,15 +37,26 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Could not save lead' }, { status: 500 });
     }
 
-    await sendLeadEmails({
-      name,
-      email,
-      phone,
-      goal,
-      referenceNumber: data.reference_number,
-    });
+    let emailsSent = true;
+    try {
+      await sendLeadEmails({
+        name,
+        email,
+        phone,
+        goal,
+        referenceNumber: data.reference_number,
+      });
+    } catch (emailError) {
+      emailsSent = false;
+      console.error('Lead emails failed after lead was saved:', emailError);
+    }
 
-    return NextResponse.json({ ok: true, id: data.id, referenceNumber: data.reference_number });
+    return NextResponse.json({
+      ok: true,
+      id: data.id,
+      referenceNumber: data.reference_number,
+      emailsSent,
+    });
   } catch (err) {
     console.error('Lead route error:', err);
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
