@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Scale, Activity, Zap, Dumbbell, Heart, Droplet, Sparkles, UtensilsCrossed, Layers, ArrowRight } from 'lucide-react';
 import { MYSTERY_OPTIONS, MYSTERY_STRATEGIES } from '@/lib/constants';
@@ -10,8 +10,6 @@ const icons = {
 
 export default function HealthMystery() {
   const [active, setActive] = useState<string | null>(null);
-  const planLinkRef = useRef<HTMLAnchorElement>(null);
-  const detailsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const obs = new IntersectionObserver((entries) => {
@@ -24,14 +22,6 @@ export default function HealthMystery() {
   const handleSelect = (id: string) => {
     setActive(id);
   };
-
-  useEffect(() => {
-    if (!active) return;
-    requestAnimationFrame(() => {
-      detailsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      planLinkRef.current?.focus({ preventScroll: true });
-    });
-  }, [active]);
 
   const strategy = active ? MYSTERY_STRATEGIES[active] : null;
 
@@ -46,63 +36,63 @@ export default function HealthMystery() {
           <p className="text-charcoal-soft max-w-xl mx-auto reveal">Select the area you want to investigate. We'll map it to your personalized nutrition strategy.</p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5 max-w-5xl mx-auto">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5 max-w-7xl mx-auto">
           {MYSTERY_OPTIONS.map((opt, i) => {
             const Icon = icons[opt.icon as keyof typeof icons];
+            const selected = active === opt.id;
+            const strategy = MYSTERY_STRATEGIES[opt.id];
             return (
-              <button
-                key={opt.id}
-                onClick={() => handleSelect(opt.id)}
-                aria-pressed={active === opt.id}
-                className={`mystery-card rounded-2xl p-6 text-left ${active === opt.id ? 'active' : ''}`}
-              >
-                <div className={`mystery-icon w-12 h-12 rounded-xl bg-sage-light flex items-center justify-center mb-4 transition-colors`}>
-                  <Icon size={20} className="text-forest" />
-                </div>
-                <h3 className="font-display text-xl font-medium mb-1.5">{opt.title}</h3>
-                <p className="mystery-desc text-sm text-charcoal-soft">{opt.desc}</p>
-              </button>
+              <div key={opt.id} className={selected ? 'sm:col-span-2 lg:col-span-3' : ''}>
+                <button
+                  onClick={() => handleSelect(opt.id)}
+                  aria-pressed={selected}
+                  className={`mystery-card w-full rounded-2xl p-6 text-left ${selected ? 'active' : ''}`}
+                >
+                  <div className="mystery-icon w-12 h-12 rounded-xl bg-sage-light flex items-center justify-center mb-4 transition-colors">
+                    <Icon size={20} className="text-forest" />
+                  </div>
+                  <h3 className="font-display text-xl font-medium mb-1.5">{opt.title}</h3>
+                  <p className="mystery-desc text-sm text-charcoal-soft">{opt.desc}</p>
+                </button>
+
+                {selected && (
+                  <div className="relative mt-4">
+                    <div className="rounded-3xl bg-forest text-warm-white overflow-hidden shadow-2xl md:grid md:grid-cols-[1fr_1.15fr] md:text-left">
+                      {strategy?.image && (
+                        <div className="min-h-64 md:min-h-full">
+                          <img
+                            src={strategy.image}
+                            alt={strategy.title}
+                            className="h-full min-h-64 w-full object-cover object-center"
+                          />
+                        </div>
+                      )}
+
+                      <div className="p-8 lg:p-10">
+                        <div className="text-[11px] tracking-[0.25em] uppercase text-sage-light font-semibold mb-3">Your Personalized Nutrition Strategy</div>
+                        <h3 className="font-display text-2xl lg:text-3xl leading-tight mb-3">{strategy?.title}</h3>
+                        <p className="text-sage-light/90 text-sm leading-relaxed mb-6">{strategy?.subtitle}</p>
+
+                        <ul className="space-y-3 text-sm text-sage-light/90 mb-8">
+                          {strategy?.points.map((point, index) => (
+                            <li key={point} className="flex items-start gap-3 leading-relaxed">
+                              <span className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-sage-light text-xs font-semibold text-forest">{index + 1}</span>
+                              <span className={index === 0 && strategy.title === 'Weight Management' ? 'font-semibold text-warm-white' : ''}>{point}</span>
+                            </li>
+                          ))}
+                        </ul>
+
+                        <Link href="/#plans" className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full text-[15px] bg-sage-light text-forest hover:bg-warm-white transition-all focus-visible:ring-4 focus-visible:ring-sage-light/60">
+                          <span>Find My Plan</span>
+                          <ArrowRight size={16} strokeWidth={2.5} />
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
             );
           })}
-        </div>
-
-        <div ref={detailsRef} className={`max-w-5xl mx-auto mt-12 lg:mt-16 transition-opacity duration-300 ${active ? 'opacity-100' : 'hidden'}`}>
-          <div className="relative">
-            <svg className="absolute -top-12 left-1/2 -translate-x-1/2 w-64 h-12 pointer-events-none" viewBox="0 0 240 48">
-              <path d="M10 5 Q 120 -5 230 5" stroke="#7E906F" strokeWidth="1.5" fill="none" strokeDasharray="4 4" opacity="0.5" />
-            </svg>
-            <div className="rounded-3xl bg-forest text-warm-white overflow-hidden shadow-2xl md:grid md:grid-cols-[0.9fr_1.1fr] md:text-left">
-              {strategy?.image && (
-                <div className="min-h-64 md:min-h-full">
-                  <img
-                    src={strategy.image}
-                    alt={strategy.title}
-                    className="h-full min-h-64 w-full object-cover object-center"
-                  />
-                </div>
-              )}
-
-              <div className="p-8 lg:p-10">
-                <div className="text-[11px] tracking-[0.25em] uppercase text-sage-light font-semibold mb-3">Your Personalized Nutrition Strategy</div>
-                <h3 className="font-display text-2xl lg:text-3xl leading-tight mb-3">{strategy?.title}</h3>
-                <p className="text-sage-light/90 text-sm leading-relaxed mb-6">{strategy?.subtitle}</p>
-
-                <ul className="space-y-3 text-sm text-sage-light/90 mb-8">
-                  {strategy?.points.map((point, index) => (
-                    <li key={point} className="flex items-start gap-3 leading-relaxed">
-                      <span className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-sage-light text-xs font-semibold text-forest">{index + 1}</span>
-                      <span className={index === 0 && strategy.title === 'Weight Management' ? 'font-semibold text-warm-white' : ''}>{point}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <Link ref={planLinkRef} href="/#plans" className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full text-[15px] bg-sage-light text-forest hover:bg-warm-white transition-all focus-visible:ring-4 focus-visible:ring-sage-light/60">
-                  <span>Find My Plan</span>
-                  <ArrowRight size={16} strokeWidth={2.5} />
-                </Link>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </section>

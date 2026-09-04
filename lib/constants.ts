@@ -112,10 +112,7 @@ export const MYSTERY_OPTIONS = [
   { id: 'paediatric', title: 'Paediatric Nutrition', desc: 'Growth-supporting meals that work even with picky eaters.', icon: 'heart' },
   { id: 'sports', title: 'Sports Nutrition', desc: 'Fuelling and recovery strategies matched to your training.', icon: 'dumbbell' },
   { id: 'midlife', title: 'Perimenopause & Menopause', desc: 'Nutrition for changing metabolism, muscle, bone and appetite through midlife.', icon: 'hormone' },
-  { id: 'family', title: 'Family & Couple Plans', desc: 'Different goals, one kitchen — nutrition that works for the whole household.', icon: 'heart' },
-  { id: 'meal-planning', title: 'Personalised Meal Planning', desc: 'Meals built around your cuisine, kitchen, calendar and budget.', icon: 'utensils' },
   { id: 'lifestyle', title: 'Lifestyle Counselling', desc: 'Habit building and accountability that outlast motivation.', icon: 'bolt' },
-  { id: 'corporate', title: 'Corporate Nutrition & Wellness', desc: 'Practical nutrition education for healthier, more energised workplaces.', icon: 'layers' },
 ] as const;
 
 export const MYSTERY_STRATEGIES: Record<string, { title: string; subtitle: string; points: string[]; image?: string }> = {
@@ -141,10 +138,7 @@ export const MYSTERY_STRATEGIES: Record<string, { title: string; subtitle: strin
   paediatric: { title: 'Paediatric Nutrition', subtitle: 'Growth-supporting meals that work even with picky eaters.', points: ['Growth-focused meal planning', 'Picky-eater friendly strategies', 'Family routines that feel achievable'] },
   sports: { title: 'Sports Nutrition', subtitle: 'Fuelling and recovery strategies matched to your training.', points: ['Training and recovery nutrition', 'Strength-supportive meal planning', 'Hydration and performance habits'], image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1200&q=80' },
   midlife: { title: 'Perimenopause & Menopause', subtitle: 'Nutrition for changing metabolism, muscle, bone and appetite through midlife.', points: ['Support for changing metabolism', 'Muscle and bone supportive meals', 'Appetite and energy strategies'] },
-  family: { title: 'Family & Couple Plans', subtitle: 'Different goals, one kitchen — nutrition that works for the whole household.', points: ['Plans for different health goals', 'One-kitchen meal strategies', 'Flexible support for the household'] },
-  'meal-planning': { title: 'Personalised Meal Planning', subtitle: 'Meals built around your cuisine, kitchen, calendar and budget.', points: ['Cuisine and kitchen-aware meals', 'Planning for your calendar', 'Practical choices for your budget'] },
   lifestyle: { title: 'Lifestyle Counselling', subtitle: 'Habit building and accountability that outlast motivation.', points: ['Small, sustainable habit changes', 'Accountability that fits real life', 'Tools to build lasting consistency'] },
-  corporate: { title: 'Corporate Nutrition & Wellness', subtitle: 'Practical nutrition education for healthier, more energised workplaces.', points: ['Engaging workplace education', 'Healthy, practical routines', 'Support for energised teams'] },
 };
 
 export const TESTIMONIALS = [
