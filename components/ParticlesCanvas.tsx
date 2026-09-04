@@ -15,6 +15,7 @@ export default function ParticlesCanvas() {
 
     const parent = canvas.parentElement!;
     let w = 0, h = 0;
+    let animationFrame = 0;
     let particles: { x: number; y: number; vx: number; vy: number; r: number }[] = [];
     const mouse = { x: -1000, y: -1000 };
 
@@ -47,7 +48,7 @@ export default function ParticlesCanvas() {
         if (p.y < 0 || p.y > h) p.vy *= -1;
         const dx = mouse.x - p.x, dy = mouse.y - p.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 120) {
+        if (dist > 0 && dist < 120) {
           const force = (120 - dist) / 120 * 0.04;
           p.x += (dx / dist) * force; p.y += (dy / dist) * force;
         }
@@ -74,7 +75,7 @@ export default function ParticlesCanvas() {
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
       });
-      requestAnimationFrame(animate);
+      animationFrame = requestAnimationFrame(animate);
     };
 
     resize(); init(); animate();
@@ -87,12 +88,14 @@ export default function ParticlesCanvas() {
     const onLeave = () => { mouse.x = -1000; mouse.y = -1000; };
     parent.addEventListener('mousemove', onMove);
     parent.addEventListener('mouseleave', onLeave);
-    window.addEventListener('resize', () => { resize(); init(); });
+    const onResize = () => { resize(); init(); };
+    window.addEventListener('resize', onResize);
 
     return () => {
       parent.removeEventListener('mousemove', onMove);
       parent.removeEventListener('mouseleave', onLeave);
-      cancelAnimationFrame(animate as unknown as number);
+      window.removeEventListener('resize', onResize);
+      cancelAnimationFrame(animationFrame);
     };
   }, []);
 

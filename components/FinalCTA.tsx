@@ -7,10 +7,15 @@ import { whatsappLink } from '@/lib/constants';
 
 export default function FinalCTA() {
   useEffect(() => {
+    const elements = document.querySelectorAll('.reveal, .line-block');
+    if (typeof IntersectionObserver === 'undefined') {
+      elements.forEach((el) => el.classList.add('visible'));
+      return;
+    }
     const obs = new IntersectionObserver((entries) => {
       entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('visible'); });
     }, { threshold: 0.12 });
-    document.querySelectorAll('.reveal, .line-block').forEach((el) => obs.observe(el));
+    elements.forEach((el) => obs.observe(el));
     return () => obs.disconnect();
   }, []);
 

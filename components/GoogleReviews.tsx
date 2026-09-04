@@ -9,21 +9,32 @@ export default function GoogleReviews() {
         <div className="rounded-3xl border border-sage/35 bg-ivory p-8 md:p-12 text-center shadow-sm">
           <div className="inline-flex items-center gap-2 text-sage-dark mb-5">
             <Star size={18} fill="currentColor" />
-            <span className="text-[11px] tracking-[0.25em] uppercase font-semibold">Google Reviews</span>
+            <span className="text-[11px] tracking-[0.25em] uppercase font-semibold">Google Business Profile</span>
           </div>
           <h2 className="font-display text-3xl md:text-5xl text-forest-deep mb-4">Hear From Sakshi&apos;s Clients</h2>
           <p className="max-w-xl mx-auto text-charcoal-soft leading-relaxed mb-8">
-            Read the latest verified experiences and feedback on Google.
+            Read client experiences on Google, then share your own experience with Sakshi&apos;s nutrition guidance.
           </p>
-          <a
-            href={googleReviewsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="cta-primary inline-flex items-center gap-2.5 px-7 py-4 rounded-full text-[15px]"
-          >
-            <span>Read Reviews on Google</span>
-            <ExternalLink size={16} strokeWidth={2.5} />
-          </a>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <a
+              href={googleReviewsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="cta-primary inline-flex items-center gap-2.5 px-7 py-4 rounded-full text-[15px]"
+            >
+              <span>Read Reviews on Google</span>
+              <ExternalLink size={16} strokeWidth={2.5} />
+            </a>
+            <a
+              href={googleReviewsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="cta-secondary inline-flex items-center gap-2.5 px-7 py-4 rounded-full text-[15px]"
+            >
+              <Star size={16} fill="currentColor" />
+              <span>Leave a Review</span>
+            </a>
+          </div>
         </div>
       </div>
     </section>

@@ -14,6 +14,12 @@ export default function HowItWorks() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    const elements = document.querySelectorAll('.reveal, .line-block');
+    if (typeof IntersectionObserver === 'undefined') {
+      elements.forEach((el) => el.classList.add('visible'));
+      if (progressRef.current) progressRef.current.style.width = '100%';
+      return;
+    }
     const obs = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
         if (e.isIntersecting) {
@@ -22,7 +28,7 @@ export default function HowItWorks() {
         }
       });
     }, { threshold: 0.4, rootMargin: '0px 0px -60px 0px' });
-    document.querySelectorAll('.reveal, .line-block').forEach((el) => obs.observe(el));
+    elements.forEach((el) => obs.observe(el));
     if (sectionRef.current) obs.observe(sectionRef.current);
     return () => obs.disconnect();
   }, []);

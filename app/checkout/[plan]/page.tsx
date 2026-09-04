@@ -14,6 +14,7 @@ export default function CheckoutPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [customer, setCustomer] = useState({ name: '', email: '', phone: '' });
   const planId = params.plan as string;
 
   const plan = PLANS.find((p) => p.id === planId)
@@ -23,18 +24,30 @@ export default function CheckoutPage() {
     const script = document.createElement('script');
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
     script.async = true;
+    script.onload = () => setLoading(false);
+    script.onerror = () => {
+      setLoading(false);
+      setError('Secure payment could not be loaded. Please refresh and try again.');
+    };
     document.body.appendChild(script);
-    setLoading(false);
-    return () => { document.body.removeChild(script); };
+    return () => {
+      script.onload = null;
+      script.onerror = null;
+      script.remove();
+    };
   }, []);
 
   const handlePay = async () => {
     if (!plan) return;
+    if (!window.Razorpay) {
+      setError('Secure payment is still loading. Please try again in a moment.');
+      return;
+    }
     try {
       const res = await fetch('/api/payment/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: planId }),
+        body: JSON.stringify({ plan: planId, ...customer }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
@@ -55,10 +68,12 @@ export default function CheckoutPage() {
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
               plan: data.plan_name,
+              ...customer,
             }),
           });
           if (verifyRes.ok) {
-            router.push('/success?plan=' + encodeURIComponent(data.plan_name));
+            const verifyData = await verifyRes.json();
+            router.push('/success?plan=' + encodeURIComponent(data.plan_name) + '&client=' + encodeURIComponent(verifyData.clientId ?? ''));
           } else {
             setError('Payment verification failed. Please contact Sakshi.');
           }
@@ -96,6 +111,11 @@ export default function CheckoutPage() {
           <div className="flex items-baseline gap-3 mb-6 pb-6 border-b border-sage/30">
             <span className="font-display text-5xl font-medium text-forest-deep">{plan.priceLabel}</span>
             {plan.period && <span className="text-sage-dark text-sm">{plan.period}</span>}
+          </div>
+          <div className="space-y-4 mb-6">
+            <input value={customer.name} onChange={(e) => setCustomer({ ...customer, name: e.target.value })} className="input-field" placeholder="Full name" autoComplete="name" required />
+            <input value={customer.email} onChange={(e) => setCustomer({ ...customer, email: e.target.value })} className="input-field" type="email" placeholder="Email address" autoComplete="email" required />
+            <input value={customer.phone} onChange={(e) => setCustomer({ ...customer, phone: e.target.value })} className="input-field" type="tel" placeholder="Mobile number" autoComplete="tel" required />
           </div>
           <button onClick={handlePay} disabled={loading} className="cta-primary w-full py-4 rounded-full text-[15px] flex items-center justify-center gap-2.5 mb-4 disabled:opacity-60">
             <Lock size={16} strokeWidth={2.5} />

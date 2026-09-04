@@ -6,10 +6,15 @@ import { useEffect } from 'react';
 
 export default function Packages() {
   useEffect(() => {
+    const elements = document.querySelectorAll('.reveal, .line-block');
+    if (typeof IntersectionObserver === 'undefined') {
+      elements.forEach((el) => el.classList.add('visible'));
+      return;
+    }
     const obs = new IntersectionObserver((entries) => {
       entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('visible'); });
     }, { threshold: 0.12 });
-    document.querySelectorAll('.reveal, .line-block').forEach((el) => obs.observe(el));
+    elements.forEach((el) => obs.observe(el));
     return () => obs.disconnect();
   }, []);
 
@@ -52,13 +57,16 @@ export default function Packages() {
                   </ul>
                 </div>
               )}
-              <div className="flex items-baseline gap-3 mb-1.5">
+              <div className="border-t border-beige/80 pt-5 mb-5">
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-sage-dark mb-2">Program investment</p>
+                <div className="flex items-baseline gap-3 mb-1.5">
                 {plan.originalPrice && <span className="price-strike font-display text-xl">₹{plan.originalPrice.toLocaleString('en-IN')}</span>}
                 <span className="font-display text-5xl lg:text-6xl font-medium text-forest-deep leading-none">{plan.priceLabel}</span>
+                </div>
+                {plan.period && <div className="text-sm text-sage-dark font-medium mb-1">{plan.period}</div>}
+                {plan.saveBadge && <div className="inline-flex w-fit items-center gap-1.5 bg-sage-light/40 text-forest text-xs font-semibold px-2.5 py-1 rounded-full">{plan.saveBadge}</div>}
               </div>
-              {plan.period && <div className="text-sm text-sage-dark font-medium mb-1">{plan.period}</div>}
-              {plan.saveBadge && <div className="inline-flex w-fit items-center gap-1.5 bg-sage-light/40 text-forest text-xs font-semibold px-2.5 py-1 rounded-full mb-6">{plan.saveBadge}</div>}
-              {!plan.saveBadge && <div className="mb-6" />}
+              {plan.bestSuitedFor && <p className="text-xs font-semibold uppercase tracking-[0.16em] text-sage-dark mb-3">Includes</p>}
               <ul className="space-y-3 mb-8 flex-1">
                 {plan.features.map((f) => (
                   <li key={f} className="flex items-start gap-2.5 text-sm text-charcoal-soft">
@@ -67,7 +75,7 @@ export default function Packages() {
                   </li>
                 ))}
               </ul>
-              {plan.recommendation && <p className="text-sm font-medium italic text-forest mb-6">{plan.recommendation}</p>}
+              {plan.recommendation && <p className="rounded-xl bg-sage-light/35 border border-sage/30 px-4 py-3 text-sm font-medium italic text-forest mb-6">{plan.recommendation}</p>}
               <Link href={`/checkout/${plan.id}`} className={`${plan.popular ? 'cta-primary' : 'cta-secondary'} block w-full py-${plan.popular ? '4' : '3.5'} rounded-full text-center text-sm`}>
                 {plan.cta}
               </Link>

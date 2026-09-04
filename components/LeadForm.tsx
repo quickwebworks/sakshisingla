@@ -1,11 +1,13 @@
 'use client';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useToast } from './ToastProvider';
 import { ArrowRight } from 'lucide-react';
 import { MYSTERY_OPTIONS } from '@/lib/constants';
 
 export default function LeadForm() {
   const toast = useToast();
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -21,11 +23,7 @@ export default function LeadForm() {
       });
       const result = await res.json();
       if (!res.ok) throw new Error(result.error ?? 'Request failed');
-      const emailNote = result.emailsSent === false
-        ? ' Email delivery is delayed, but Sakshi has your enquiry.'
-        : '';
-      toast(`Thanks — your reference number is ${result.referenceNumber}. Sakshi will personally reach out within 24 hours.${emailNote}`);
-      form.reset();
+      router.push(`/success?type=lead&reference=${encodeURIComponent(result.referenceNumber)}${result.emailsSent === false ? '&emails=delayed' : ''}`);
     } catch {
       toast('Something went wrong. Please try WhatsApp instead.');
     } finally {

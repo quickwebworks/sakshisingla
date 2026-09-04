@@ -7,7 +7,33 @@ import { whatsappLink } from '@/lib/constants';
 
 function SuccessContent() {
   const params = useSearchParams();
+  const type = params.get('type');
+  const reference = params.get('reference');
+  const emailsDelayed = params.get('emails') === 'delayed';
   const plan = params.get('plan') ?? 'your plan';
+
+  if (type === 'lead' && reference) {
+    return (
+      <div className="min-h-screen bg-peach-soft flex items-center justify-center pt-20 px-5">
+        <div className="max-w-lg w-full bg-warm-white rounded-3xl p-8 lg:p-10 text-center shadow-2xl border border-sage/30">
+          <div className="w-16 h-16 rounded-full bg-sage-light/40 flex items-center justify-center mx-auto mb-6">
+            <CheckCircle2 size={32} className="text-forest" />
+          </div>
+          <h1 className="font-display text-3xl lg:text-4xl text-forest-deep mb-3">Thank you for reaching out.</h1>
+          <p className="text-charcoal-soft mb-6">Your enquiry has been received. Sakshi will personally reach out within 24 hours.</p>
+          <div className="rounded-2xl bg-beige/50 border border-sage/30 px-5 py-4 mb-6">
+            <div className="text-[10px] tracking-[0.22em] uppercase text-sage-dark font-semibold mb-1">Your Reference Number</div>
+            <div className="font-display text-2xl text-forest-deep tracking-[0.08em]">{reference}</div>
+          </div>
+          {emailsDelayed && <p className="text-sm text-charcoal-soft mb-6">Your confirmation email is delayed, but your enquiry is safely recorded.</p>}
+          <Link href="/" className="cta-primary inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-full text-[15px]">
+            Back to home
+            <ArrowRight size={16} strokeWidth={2.5} />
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-peach-soft flex items-center justify-center pt-20 px-5">

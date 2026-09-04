@@ -15,6 +15,9 @@ export const adminLoginSchema = z.object({
 
 export const createOrderSchema = z.object({
   plan: z.enum(['consultation', 'transformation', 'monthly', 'stay-accountable']),
+  name: z.string().min(2).max(80),
+  email: z.string().email(),
+  phone: z.string().min(7).max(20),
 });
 
 export const verifyPaymentSchema = z.object({
@@ -22,6 +25,14 @@ export const verifyPaymentSchema = z.object({
   razorpay_payment_id: z.string(),
   razorpay_signature: z.string(),
   plan: z.string(),
+  name: z.string().min(2).max(80),
+  email: z.string().email(),
+  phone: z.string().min(7).max(20),
+});
+
+export const clientLoginSchema = z.object({
+  email: z.string().email(),
+  phone: z.string().min(7).max(20),
 });
 
 export type LeadInput = z.infer<typeof leadSchema>;

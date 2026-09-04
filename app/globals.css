@@ -49,9 +49,10 @@ body { background: var(--warm-white); color: var(--charcoal); overflow-x: hidden
 .cta-primary { background: var(--forest); color: var(--warm-white); position: relative; overflow: hidden;
   transition: all 0.4s cubic-bezier(0.22,1,0.36,1); font-weight: 500; }
 .cta-primary::before { content: ''; position: absolute; inset: 0;
-  background: linear-gradient(135deg, var(--forest-deep), var(--forest)); opacity: 0; transition: opacity 0.4s; }
+  background: linear-gradient(135deg, var(--sage-dark), var(--forest-deep)); opacity: 0; transition: opacity 0.4s; }
 .cta-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 36px -10px rgba(47,74,62,0.5); }
 .cta-primary:hover::before { opacity: 1; }
+.cta-primary:active { transform: translateY(0); box-shadow: 0 8px 18px -10px rgba(47,74,62,0.45); }
 .cta-primary > * { position: relative; z-index: 1; }
 
 .cta-secondary { background: transparent; color: var(--forest); border: 1.5px solid var(--forest);
