@@ -12,6 +12,10 @@ import InvestigationLine from '@/components/InvestigationLine';
 import StickyCTA from '@/components/StickyCTA';
 import ExitIntent from '@/components/ExitIntent';
 
+// Do not let a CDN retain HTML from an older release after its hashed assets
+// have been replaced. The assets themselves remain immutable and cacheable.
+export const dynamic = 'force-dynamic';
+
 export default function Page() {
   return (
     <>
