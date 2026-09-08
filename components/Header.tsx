@@ -60,7 +60,7 @@ export default function Header() {
       </header>
 
       {/* Mobile menu */}
-      <div className={`mobile-menu lg:hidden fixed inset-0 z-90 bg-warm-white transition-transform duration-500 ${open ? 'translate-x-0' : 'translate-x-full'}`}>
+      <div className={`mobile-menu lg:hidden fixed inset-0 z-[90] bg-warm-white transition-transform duration-500 ${open ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="p-6 h-full flex flex-col">
           <div className="flex justify-end mb-12">
             <button onClick={() => setOpen(false)} className="w-10 h-10 flex items-center justify-center text-forest" aria-label="Close menu">
