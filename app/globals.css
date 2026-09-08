@@ -107,6 +107,29 @@ input, select, textarea { font-size: 16px; }
   .mobile-bottom-bar { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
 }
 
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(251, 248, 242, 0.98);
+  transform: translateX(100%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.35s ease, opacity 0.35s ease;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-top: calc(1rem + env(safe-area-inset-top));
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+}
+.mobile-menu.is-open {
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+.mobile-menu-inner {
+  min-height: 100%;
+}
+
 /* === Floating WhatsApp === */
 .float-wa { position: fixed; bottom: calc(24px + env(safe-area-inset-bottom)); right: 24px; width: 58px; height: 58px; background: #25D366; border-radius: 50%;
   display: flex; align-items: center; justify-content: center; z-index: 40; box-shadow: 0 10px 30px -6px rgba(37,211,102,0.5);

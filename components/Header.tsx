@@ -15,6 +15,13 @@ export default function Header() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [open]);
+
   const navItems = [
     { label: 'Home', href: '/#hero' },
     { label: 'How It Works', href: '/#how-it-works' },
@@ -60,8 +67,12 @@ export default function Header() {
       </header>
 
       {/* Mobile menu */}
-      <div className={`mobile-menu lg:hidden fixed inset-0 z-[90] bg-warm-white transition-transform duration-500 ${open ? 'translate-x-0' : 'translate-x-full'}`}>
-        <div className="p-6 h-full flex flex-col">
+      <div
+        className={`mobile-menu lg:hidden ${open ? 'is-open' : ''}`}
+        aria-hidden={!open}
+        aria-expanded={open}
+      >
+        <div className="mobile-menu-inner p-6 h-full flex flex-col">
           <div className="flex justify-end mb-12">
             <button onClick={() => setOpen(false)} className="w-10 h-10 flex items-center justify-center text-forest" aria-label="Close menu">
               <X size={24} />
