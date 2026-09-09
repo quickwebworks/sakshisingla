@@ -12,12 +12,14 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [mode, setMode] = useState<LoginMode>('password');
+  const googleLoginEnabled = process.env.NEXT_PUBLIC_ENABLE_GOOGLE_LOGIN === 'true';
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true); setError(null);
     setMessage(null);
     const data = Object.fromEntries(new FormData(e.currentTarget).entries()) as { email?: string; password?: string };
+    const nextPath = new URLSearchParams(window.location.search).get('next') || '';
     try {
       const supabase = supabaseBrowser();
       if (mode === 'magic-link') {
@@ -33,7 +35,7 @@ export default function LoginPage() {
           password: data.password ?? '',
         });
         if (authError) throw authError;
-        router.push('/portal');
+        router.push(nextPath || '/portal');
         router.refresh();
       }
     } catch {
@@ -45,7 +47,7 @@ export default function LoginPage() {
           body: JSON.stringify(data),
         });
         if (!res.ok) throw new Error('Invalid credentials');
-        router.push('/dashboard');
+        router.push(nextPath || '/dashboard');
       } catch {
         setError(mode === 'magic-link' ? 'Unable to send a sign-in link.' : 'Invalid email or password');
       }
@@ -64,17 +66,32 @@ export default function LoginPage() {
         <p className="text-charcoal-soft text-sm mb-7">Sign in to continue to your personalised nutrition dashboard.</p>
         <button
           type="button"
+          disabled={!googleLoginEnabled || loading}
           onClick={async () => {
+            if (!googleLoginEnabled) {
+              setError('Google sign-in is currently disabled for this workspace. Please use Email or Magic Link instead.');
+              return;
+            }
             setLoading(true); setError(null);
-            const { error: authError } = await supabaseBrowser().auth.signInWithOAuth({
-              provider: 'google',
-              options: { redirectTo: `${window.location.origin}/auth/callback` },
-            });
-            if (authError) { setError('Google sign-in is not available right now.'); setLoading(false); }
+            try {
+              const { error: authError } = await supabaseBrowser().auth.signInWithOAuth({
+                provider: 'google',
+                options: { redirectTo: `${window.location.origin}/auth/callback` },
+              });
+              if (authError) {
+                if (authError.message?.toLowerCase().includes('not enabled') || authError.message?.toLowerCase().includes('unsupported provider')) {
+                  setError('Google sign-in is not enabled in Supabase yet. Please use Email or Magic Link for now.');
+                } else {
+                  setError(authError.message || 'Google sign-in is not available right now.');
+                }
+              }
+            } finally {
+              setLoading(false);
+            }
           }}
-          className="w-full py-3.5 rounded-full border border-sage/50 bg-white text-forest font-medium flex items-center justify-center gap-2 hover:border-forest transition"
+          className={`w-full py-3.5 rounded-full border font-medium flex items-center justify-center gap-2 transition ${!googleLoginEnabled ? 'border-sage/30 bg-sage/10 text-sage-dark cursor-not-allowed' : 'border-sage/50 bg-white text-forest hover:border-forest'}`}
         >
-          <Mail size={16} /> Continue with Google
+          <Mail size={16} /> {googleLoginEnabled ? 'Continue with Google' : 'Google sign-in unavailable'}
         </button>
         <div className="my-5 flex items-center gap-3 text-xs text-sage-dark"><span className="h-px flex-1 bg-sage/30" />OR<span className="h-px flex-1 bg-sage/30" /></div>
         <form onSubmit={submit} className="space-y-4">

@@ -50,7 +50,13 @@ export default function CheckoutPage() {
         body: JSON.stringify({ plan: planId, ...customer }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error);
+      if (!res.ok) {
+        if (res.status === 401) {
+          router.push(`/login?next=${encodeURIComponent(`/checkout/${planId}`)}`);
+          return;
+        }
+        throw new Error(data.error);
+      }
 
       const rzp = new window.Razorpay({
         key: data.key,
@@ -80,6 +86,14 @@ export default function CheckoutPage() {
         },
         prefill: { name: '', email: '', contact: '' },
         theme: { color: '#2F4A3E' },
+      });
+      rzp.on('payment.failed', async () => {
+        await fetch('/api/payment/failed', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ razorpay_order_id: data.order_id }),
+        });
+        setError('Payment failed. Your order has been marked for review. Please try again.');
       });
       rzp.open();
     } catch (err: any) {
@@ -124,6 +138,7 @@ export default function CheckoutPage() {
           <div className="flex items-center justify-center gap-2 text-xs text-sage-dark">
             <ShieldCheck size={14} /> Secured by Razorpay · 256-bit encryption
           </div>
+          <p className="mt-3 text-center text-xs text-sage-dark">You must be signed in before a secure order can be created.</p>
           {error && <p className="text-red-700 text-sm text-center mt-4">{error}</p>}
         </div>
       </div>

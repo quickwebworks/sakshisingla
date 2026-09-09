@@ -4,9 +4,16 @@ import { createOrderSchema } from '@/lib/zod';
 import { supabaseAdmin } from '@/lib/supabase/admin';
 import { PLANS } from '@/lib/constants';
 import { inrToPaise } from '@/lib/utils';
+import { supabaseServer } from '@/lib/supabase/server';
 
 export async function POST(req: Request) {
   try {
+    const supabase = await supabaseServer();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      return NextResponse.json({ error: 'Please sign in before purchasing a package.' }, { status: 401 });
+    }
+
     const body = await req.json();
     const parsed = createOrderSchema.safeParse(body);
     if (!parsed.success) {
@@ -28,11 +35,17 @@ export async function POST(req: Request) {
 
     // Persist order
     await supabaseAdmin.from('payments').insert({
+      metadata: {
+        plan_id: planId,
+        user_id: user.id,
+        customer_name: parsed.data.name,
+        customer_email: parsed.data.email,
+        customer_phone: parsed.data.phone,
+      },
       razorpay_order_id: order.id,
       plan: plan.name,
       amount_paise: amountPaise,
       status: 'created',
-      metadata: { plan_id: planId },
     });
 
     return NextResponse.json({

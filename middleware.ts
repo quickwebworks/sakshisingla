@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import jwt from 'jsonwebtoken';
+import { jwtVerify } from 'jose';
 
 const ADMIN_COOKIE = 'sb-admin';
 const CLIENT_COOKIE = 'sb-client';
 
-export function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   const adminPaths = ['/dashboard', '/api/admin'];
@@ -21,8 +21,10 @@ export function middleware(req: NextRequest) {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { role?: string };
-    if (decoded.role !== (isAdminPath ? 'admin' : 'client')) throw new Error('invalid role');
+    const secret = process.env.JWT_SECRET;
+    if (!secret) throw new Error('JWT_SECRET is not configured');
+    const { payload } = await jwtVerify(token, new TextEncoder().encode(secret), { algorithms: ['HS256'] });
+    if (payload.role !== (isAdminPath ? 'admin' : 'client')) throw new Error('invalid role');
     return NextResponse.next();
   } catch {
     return NextResponse.redirect(new URL('/login', req.url));

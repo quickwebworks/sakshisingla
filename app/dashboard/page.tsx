@@ -1,8 +1,8 @@
 'use client';
 import { useEffect, useMemo, useState } from 'react';
-import { ArrowUpRight, Calendar, CheckCircle2, CreditCard, Download, LogOut, Mail, PackageCheck, Phone, Search, ShieldCheck, Sparkles, Target, TrendingUp, Users } from 'lucide-react';
+import { ArrowUpRight, Calendar, CheckCircle2, CreditCard, Download, LogOut, Mail, PackageCheck, Phone, Search, ShieldCheck, Sparkles, Target, TrendingUp, UserPlus, Users } from 'lucide-react';
 
-type Tab = 'overview' | 'leads' | 'payments' | 'packages' | 'subscriptions';
+type Tab = 'overview' | 'leads' | 'payments' | 'clients' | 'packages' | 'subscriptions';
 
 type Lead = {
   id: string;
@@ -20,7 +20,7 @@ type Payment = {
   customer: string;
   plan: string;
   amount: number;
-  status: 'paid' | 'pending' | 'refunded';
+  status: 'created' | 'paid' | 'pending' | 'failed' | 'refunded';
   date: string;
 };
 
@@ -39,6 +39,15 @@ type SubscriptionRow = {
   nextBilling: string;
   amount: number;
   status: 'active' | 'trial' | 'paused';
+};
+
+type ClientRow = {
+  id: string;
+  full_name: string;
+  email: string | null;
+  phone: string | null;
+  role: string;
+  created_at: string;
 };
 
 const mockLeads: Lead[] = [
@@ -77,7 +86,9 @@ const statusClasses: Record<string, string> = {
   booked: 'bg-emerald-100 text-emerald-800 border border-emerald-200',
   'follow-up': 'bg-amber-100 text-amber-800 border border-amber-200',
   paid: 'bg-emerald-100 text-emerald-800 border border-emerald-200',
+  created: 'bg-sky-100 text-sky-800 border border-sky-200',
   pending: 'bg-amber-100 text-amber-800 border border-amber-200',
+  failed: 'bg-rose-100 text-rose-700 border border-rose-200',
   refunded: 'bg-rose-100 text-rose-700 border border-rose-200',
   active: 'bg-forest/10 text-forest border border-forest/20',
   paused: 'bg-slate-200 text-slate-700 border border-slate-300',
@@ -87,21 +98,25 @@ const statusClasses: Record<string, string> = {
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState<Tab>('overview');
   const [loading, setLoading] = useState(true);
-  const [leads, setLeads] = useState<Lead[]>(mockLeads);
-  const [payments, setPayments] = useState<Payment[]>(mockPayments);
+  const [leads, setLeads] = useState<Lead[]>([]);
+  const [payments, setPayments] = useState<Payment[]>([]);
   const [packages, setPackages] = useState<PackageRow[]>(mockPackages);
-  const [subscriptions, setSubscriptions] = useState<SubscriptionRow[]>(mockSubscriptions);
+  const [subscriptions, setSubscriptions] = useState<SubscriptionRow[]>([]);
+  const [clients, setClients] = useState<ClientRow[]>([]);
   const [query, setQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [clientInvite, setClientInvite] = useState({ name: '', email: '', phone: '' });
+  const [inviteState, setInviteState] = useState<string | null>(null);
 
   useEffect(() => {
     let ignore = false;
 
     const fetchDashboard = async () => {
       try {
-        const [leadsRes, statsRes] = await Promise.all([
+        const [leadsRes, statsRes, overviewRes] = await Promise.all([
           fetch('/api/admin/leads', { cache: 'no-store' }),
           fetch('/api/admin/stats', { cache: 'no-store' }),
+          fetch('/api/admin/overview', { cache: 'no-store' }),
         ]);
 
         if (!ignore) {
@@ -119,13 +134,20 @@ export default function DashboardPage() {
               }
             }
           }
+
+          if (overviewRes.ok) {
+            const overview = await overviewRes.json();
+            if (Array.isArray(overview.payments)) setPayments(overview.payments);
+            if (Array.isArray(overview.subscriptions)) setSubscriptions(overview.subscriptions);
+            if (Array.isArray(overview.clients)) setClients(overview.clients);
+          }
         }
       } catch {
         if (!ignore) {
-          setLeads(mockLeads);
-          setPayments(mockPayments);
-          setPackages(mockPackages);
-          setSubscriptions(mockSubscriptions);
+          setLeads([]);
+          setPayments([]);
+          setSubscriptions([]);
+          setClients([]);
         }
       } finally {
         if (!ignore) setLoading(false);
@@ -162,14 +184,32 @@ export default function DashboardPage() {
     }
   };
 
+  const inviteClient = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setInviteState('Sending invitation...');
+    try {
+      const response = await fetch('/api/admin/clients', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(clientInvite),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Could not invite client.');
+      setInviteState(data.message);
+      setClientInvite({ name: '', email: '', phone: '' });
+    } catch (error) {
+      setInviteState(error instanceof Error ? error.message : 'Could not invite client.');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-warm-white pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-5 lg:px-8 py-6 sm:py-8 lg:py-10">
         <header className="rounded-[28px] border border-sage/30 bg-ivory p-4 sm:p-5 lg:p-6 shadow-[0_20px_60px_-30px_rgba(47,74,62,0.28)]">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <div className="kicker mb-2">Admin Console</div>
-              <h1 className="font-display text-3xl sm:text-4xl text-forest-deep">Leads, revenue & client management</h1>
+              <div className="kicker mb-2">Sakshi Studio</div>
+              <h1 className="font-display text-3xl sm:text-4xl text-forest-deep">Client growth, revenue & care operations</h1>
             </div>
             <div className="flex items-center gap-2 sm:gap-3">
               <button className="hidden sm:inline-flex items-center gap-2 rounded-full border border-sage/50 bg-white px-4 py-2.5 text-sm font-medium text-forest transition hover:border-forest hover:bg-sage-light">
@@ -189,6 +229,7 @@ export default function DashboardPage() {
             ['overview', 'Overview'],
             ['leads', 'Leads'],
             ['payments', 'Payments'],
+            ['clients', 'Clients'],
             ['packages', 'Packages'],
             ['subscriptions', 'Subscriptions'],
           ].map(([key, label]) => (
@@ -386,6 +427,28 @@ export default function DashboardPage() {
               </section>
             )}
 
+            {activeTab === 'clients' && (
+              <section className="rounded-3xl border border-sage/30 bg-ivory p-4 sm:p-5 lg:p-6">
+                <div className="mb-4 flex items-center justify-between gap-3">
+                  <div>
+                    <div className="kicker mb-2">Clients</div>
+                    <h2 className="font-display text-2xl text-forest-deep">Registered client accounts</h2>
+                  </div>
+                  <span className="rounded-full bg-sage-light/60 px-3 py-2 text-xs font-medium text-forest">{clients.length} accounts</span>
+                </div>
+                {clients.length === 0 ? (
+                  <p className="rounded-2xl border border-sage/20 bg-white p-5 text-sm text-charcoal-soft">No client accounts have been registered yet.</p>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full border-separate border-spacing-0 text-left">
+                      <thead><tr className="text-[10px] uppercase tracking-[0.18em] text-sage-dark"><th className="border-b border-sage/30 px-3 py-3 font-semibold">Client</th><th className="border-b border-sage/30 px-3 py-3 font-semibold">Email</th><th className="border-b border-sage/30 px-3 py-3 font-semibold">Phone</th><th className="border-b border-sage/30 px-3 py-3 font-semibold">Joined</th></tr></thead>
+                      <tbody>{clients.map((client) => <tr key={client.id} className="text-sm text-charcoal-soft hover:bg-white/70"><td className="border-b border-sage/20 px-3 py-3 font-medium text-forest">{client.full_name || 'Unnamed client'}</td><td className="border-b border-sage/20 px-3 py-3">{client.email || '—'}</td><td className="border-b border-sage/20 px-3 py-3">{client.phone || '—'}</td><td className="border-b border-sage/20 px-3 py-3">{new Date(client.created_at).toLocaleDateString('en-IN')}</td></tr>)}</tbody>
+                    </table>
+                  </div>
+                )}
+              </section>
+            )}
+
             {activeTab === 'packages' && (
               <section className="rounded-3xl border border-sage/30 bg-ivory p-4 sm:p-5 lg:p-6">
                 <div className="mb-4 flex items-center justify-between gap-3">
@@ -393,10 +456,28 @@ export default function DashboardPage() {
                     <div className="kicker mb-2">Packages</div>
                     <h2 className="font-display text-2xl text-forest-deep">Offer catalog</h2>
                   </div>
-                  <button className="inline-flex items-center gap-2 rounded-full bg-forest px-4 py-2.5 text-sm font-medium text-warm-white">
-                    <PackageCheck size={15} /> Add package
-                  </button>
+                  <span className="inline-flex items-center gap-2 rounded-full bg-sage-light/60 px-4 py-2.5 text-sm font-medium text-forest">
+                    <PackageCheck size={15} /> Package access
+                  </span>
                 </div>
+                <form onSubmit={inviteClient} className="mb-6 rounded-2xl border border-sage/30 bg-white p-4 sm:p-5">
+                  <div className="flex items-start gap-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-forest text-warm-white"><UserPlus size={17} /></div>
+                    <div>
+                      <h3 className="font-display text-xl text-forest-deep">Add a client manually</h3>
+                      <p className="mt-1 text-sm text-charcoal-soft">Send a secure Supabase invitation. The client can then sign in and purchase an assigned package.</p>
+                    </div>
+                  </div>
+                  <div className="mt-4 grid gap-3 md:grid-cols-3">
+                    <input required value={clientInvite.name} onChange={(event) => setClientInvite({ ...clientInvite, name: event.target.value })} className="input-field" placeholder="Full name" />
+                    <input required type="email" value={clientInvite.email} onChange={(event) => setClientInvite({ ...clientInvite, email: event.target.value })} className="input-field" placeholder="Email address" />
+                    <input required value={clientInvite.phone} onChange={(event) => setClientInvite({ ...clientInvite, phone: event.target.value })} className="input-field" placeholder="Phone number" />
+                  </div>
+                  <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <p className={`text-xs ${inviteState?.includes('sent') ? 'text-forest' : 'text-charcoal-soft'}`}>{inviteState || 'Manual clients receive an email to create their password.'}</p>
+                    <button type="submit" className="inline-flex items-center justify-center gap-2 rounded-full bg-forest px-4 py-2.5 text-sm font-medium text-warm-white"><UserPlus size={15} /> Invite client</button>
+                  </div>
+                </form>
                 <div className="overflow-x-auto">
                   <table className="min-w-full border-separate border-spacing-0 text-left">
                     <thead>

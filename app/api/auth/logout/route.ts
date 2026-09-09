@@ -1,7 +1,11 @@
 import { NextResponse } from 'next/server';
-import { clearAdminCookie } from '@/lib/jwt';
+import { clearAdminCookie, clearClientCookie } from '@/lib/jwt';
+import { supabaseServer } from '@/lib/supabase/server';
 
-export async function POST() {
+export async function POST(req: Request) {
+  const supabase = await supabaseServer();
+  await supabase.auth.signOut();
   await clearAdminCookie();
-  return NextResponse.json({ ok: true });
+  await clearClientCookie();
+  return NextResponse.redirect(new URL('/logout', req.url));
 }
